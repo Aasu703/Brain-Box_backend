@@ -24,5 +24,32 @@ const createUser = async (req, res) => {
     }
 };
 
+const updateUser = async(req, res)=>{
+    try{
+        const User = await User.findByPk(req.params.id);
+        if (!User) {
+            return res.status(404).json({ message: 'User not found'});
+        }
+        await User.update(req.body);
+        res.json(User);
+    } catch (err) {
+        res.status(400).json({ error: err.message});
+    }
+}
+
+const deleteUser = async(req, res)=>{
+    try {
+        const User = await User.findByPk(req.params.id);
+        if (!User) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        await User.destroy();
+        res.json({ message: 'User deleted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+
 // Export functions for routes
-module.exports = { getUser, createUser };
+module.exports = { getUser, createUser, updateUser, deleteUser };
