@@ -21,6 +21,7 @@ const createUser = async (req, res) => {
         console.log('New test user created');
     } catch (error) {
         res.status(500).json({ error: 'Failed to create test user' });
+        console.log(error)
     }
 };
 
