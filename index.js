@@ -1,33 +1,39 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
-const sequalize = require('./backend/db');
+const bodyParser = require('body-parser');
+const sequelize = require('./backend/db'); // Fixed typo
 const UserRoute = require('./routes/UserRoute'); // Correct import
+const VirtualRoute = require("./routes/VirtualRoute");
 
 // Creating a server
 const app = express();
 
 // Creating a port
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-// Creating a middleware
+
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-    res.send("your partners");
-});
-app.get('/ourpartners', (req, res) => {
-    res.send("your partners");
-});
+// Routes
+// app.get('/', (req, res) => {
+//     res.send("Welcome to our API");
+// });
+app.get('/login',(req, res)=>{
+    res.send("Welcome to the web page")
+})
 
-// Use the correct variable name for the routes
-app.use('/user', UserRoute);
+app.use('/users', UserRoute);
+app.use("/api/virtualroom", VirtualRoute);
 
 // Running on port
 app.listen(PORT, () => {
-    console.log(`Server Running on ..................PORT ${PORT}`);
+    console.log(`Server Running on PORT ${PORT}`);
 });
 
 // Connect to the database server
+sequelize.authenticate()
+  .then(() => console.log('Database connected successfully!'))
+  .catch((err) => console.error('Error connecting to database:', err));
