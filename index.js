@@ -4,7 +4,10 @@ const bodyParser = require('body-parser');
 const sequelize = require('./backend/db'); // Fixed typo
 const UserRoute = require('./routes/UserRoute'); // Correct import
 const VirtualRoute = require("./routes/VirtualRoute");
-
+const StudySession = require("./routes/StudyRoute"); // Correct
+const Participation = require("./routes/ParticipationRoute"); // Correct import
+const ChatMessage = require("./routes/ChatMessageRoute"); // Correct
+const Material = require("./routes/MaterialRoute"); // Correct
 // Creating a server
 const app = express();
 
@@ -27,7 +30,10 @@ app.get('/login',(req, res)=>{
 
 app.use('/users', UserRoute);
 app.use("/api/virtualroom", VirtualRoute);
-
+app.use('/api/material', Material);
+app.use('/api/Participation', Participation);
+app.use('/api/study', StudySession);
+app.use('/api/chat', ChatMessage);
 // Running on port
 app.listen(PORT, () => {
     console.log(`Server Running on PORT ${PORT}`);

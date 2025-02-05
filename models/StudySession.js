@@ -1,28 +1,28 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../backend/db');
 
-const VirtualRoom = sequelize.define('VirtualRoom', {
-    Room_ID: {
+const StudySession = sequelize.define('StudySession', {
+    Session_ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    Room_Name: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    Created_By: {
+    Room_ID: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    Created_Date: {
+    Session_Date: {
         type: DataTypes.DATE,
         allowNull: false
     },
-    Room_Type: {
-        type: DataTypes.STRING,
+    Start_time: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    End_time: {
+        type: DataTypes.DATE,
         allowNull: false
     }
 });
 
-module.exports = VirtualRoom;
+module.exports = StudySession;
