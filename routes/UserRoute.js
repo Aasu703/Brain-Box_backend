@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controller/UserController');
+const authMiddleware = require('../middleware/auth');
 
-// POST route for user signup
+// Public Routes
 router.post('/signup', UserController.signup);
-
-// POST route for user login
 router.post('/login', UserController.login);
 
-// Existing routes
-router.post('/users', UserController.createUser);
-router.get('/users', UserController.getUsers);
+// Protected Routes (Require JWT)
+router.get('/users', authMiddleware, UserController.getUsers);
 
 module.exports = router;
