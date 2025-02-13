@@ -1,37 +1,27 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../backend/db');
-const bcrypt = require('bcrypt');
+const sequelize = require('../backend/db'); // Ensure this matches the correct path
 
 const User = sequelize.define('User', {
-    User_ID: {
+    id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
+        primaryKey: true
     },
-    Email: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false
-    },
-    Role: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    Password: {
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    password: {
         type: DataTypes.STRING,
         allowNull: false
     }
+}, {
+    timestamps: true
 });
-
-// Hook to hash password before saving the user
-User.beforeCreate(async (user) => {
-    const salt = await bcrypt.genSalt(10);
-    user.Password = await bcrypt.hash(user.Password, salt);
-});
-
-// Method to compare password
-User.prototype.comparePassword = async function(password) {
-    return await bcrypt.compare(password, this.Password);
-};
 
 module.exports = User;
