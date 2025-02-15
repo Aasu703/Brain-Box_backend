@@ -1,25 +1,21 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 exports.signup = async (req, res) => {
     try {
-        const { name, email, password } = req.body; // ✅ Use correct lowercase column names
+        const { name, email, password } = req.body;
 
-        // 🔹 Check if the user already exists
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
             return res.status(400).json({ message: "Email already registered" });
         }
 
-        // 🔹 Create new user
+        // 🔹 Create new user (Password hashing is handled in User model)
         const user = await User.create({ name, email, password });
 
         // 🔹 Generate JWT token
-        const token = jwt.sign(
-            { id: user.id, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
-        );
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         res.status(201).json({ message: "User created successfully", token, user });
     } catch (error) {
@@ -27,12 +23,10 @@ exports.signup = async (req, res) => {
     }
 };
 
-// 🔹 Login Function
 exports.login = async (req, res) => {
     try {
-        const { email, password } = req.body; // ✅ Use correct lowercase column names
+        const { email, password } = req.body;
 
-        // 🔹 Check if user exists
         const user = await User.findOne({ where: { email } });
         if (!user) {
             return res.status(401).json({ message: "Invalid credentials" });
@@ -45,11 +39,7 @@ exports.login = async (req, res) => {
         }
 
         // 🔹 Generate JWT token
-        const token = jwt.sign(
-            { id: user.id, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
-        );
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         res.status(200).json({ message: "Login successful", token });
     } catch (error) {
@@ -57,7 +47,6 @@ exports.login = async (req, res) => {
     }
 };
 
-// 🔹 Get All Users (Protected Route)
 exports.getUsers = async (req, res) => {
     try {
         const users = await User.findAll({ attributes: ["id", "name", "email"] });
