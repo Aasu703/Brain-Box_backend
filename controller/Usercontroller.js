@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+require("dotenv").config();  // Ensure environment variables are loaded
 
 exports.signup = async (req, res) => {
     try {
@@ -11,11 +12,14 @@ exports.signup = async (req, res) => {
             return res.status(400).json({ message: "Email already registered" });
         }
 
-        // 🔹 Create new user (Password hashing is handled in User model)
         const user = await User.create({ name, email, password });
 
-        // 🔹 Generate JWT token
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        // Generate JWT token using env variable
+        const token = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
 
         res.status(201).json({ message: "User created successfully", token, user });
     } catch (error) {
@@ -32,21 +36,23 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // 🔹 Compare password
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // 🔹 Generate JWT token
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        // Generate JWT token using env variable
+        const token = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
 
         res.status(200).json({ message: "Login successful", token });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
-
 exports.getUsers = async (req, res) => {
     try {
         const users = await User.findAll({ attributes: ["id", "name", "email"] });
@@ -55,3 +61,4 @@ exports.getUsers = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+

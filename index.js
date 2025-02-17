@@ -43,3 +43,7 @@ app.listen(PORT, () => {
 sequelize.authenticate()
   .then(() => console.log('Database connected successfully!'))
   .catch((err) => console.error('Error connecting to database:', err));
+
+
+// console.log("DB Name:", process.env.DB_NAME);
+// console.log("JWT Secret:", process.env.JWT_SECRET ? "Loaded ✅" : "Not Loaded ❌");
