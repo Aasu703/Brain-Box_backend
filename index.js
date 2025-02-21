@@ -14,19 +14,18 @@ const app = express();
 // Creating a port
 const PORT = process.env.PORT || 5000;
 
+app.listen(PORT, () => {
+  console.log(`Server Running on PORT ${PORT}`);
+});
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-// app.get('/', (req, res) => {
-//     res.send("Welcome to our API");
-// });
-app.get('/login',(req, res)=>{
-    res.send("Welcome to the web page")
-})
+
+
 
 app.use('/users', UserRoute);
 app.use("/api/virtualroom", VirtualRoute);
@@ -34,10 +33,8 @@ app.use('/api/material', Material);
 app.use('/api/Participation', Participation);
 app.use('/api/study', StudySession);
 app.use('/api/chat', ChatMessage);
-// Running on port
-app.listen(PORT, () => {
-    console.log(`Server Running on PORT ${PORT}`);
-});
+
+
 
 // Connect to the database server
 sequelize.authenticate()
